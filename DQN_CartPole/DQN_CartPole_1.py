@@ -7,8 +7,9 @@ from collections import deque
 from keras.models import Model, load_model
 from keras.layers import Input, Dense
 from keras.optimizers import Adam, RMSprop
-from tf_agents.environments import py_environment
 
+#from tf_agents.environments import py_environment
+#from tf_agents.environments import tf_environment
 
 def OurModel(input_shape, action_space):
     X_input = Input(input_shape)
