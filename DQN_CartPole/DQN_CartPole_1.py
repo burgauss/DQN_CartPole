@@ -68,7 +68,6 @@ class DQNAgent:
             return
         # Randomly sample minibatch from the memory
         minibatch = random.sample(self.memory, min(len(self.memory), self.batch_size))
-
         state = np.zeros((self.batch_size, self.state_size))
         next_state = np.zeros((self.batch_size, self.state_size))
         action, reward, done = [], [], []
@@ -153,6 +152,5 @@ class DQNAgent:
 
 if __name__ == "__main__":
     agent = DQNAgent()
-    print(agent.state_size)
-    #agent.run()
+    agent.run()
     #agent.test()
