@@ -152,6 +152,7 @@ class DQNAgent:
             done = False
             i = 0 #represent the steps
             while not done:
+                episode_reward = 0
                 action = self.act(state)
                 next_state, reward, done, _ = self.env.step(action)
                 #next_state = np.reshape(next_state, [1, self.state_size])
@@ -159,11 +160,15 @@ class DQNAgent:
                 #    reward = reward
                 #else:
                 #    reward = -100
+                
+                #Average Reward
+                episode_reward += reward
+
                 self.remember(state, action, reward, next_state, done)
                 state = next_state
                 i += 1
                 if done:                   
-                    print("episode: {}/{}, score: {}, e: {:.2}".format(e, self.EPISODES, i, self.epsilon))
+                    print("episode: {}/{}, score: {}, e: {:.2}, ep_reward: {}".format(e, self.EPISODES, i, self.epsilon, episode_reward))
                     if i == 100:
                         print("Saving trained model as cartpole-dqn.h5")
                         self.save("cartpole-dqn.h5")

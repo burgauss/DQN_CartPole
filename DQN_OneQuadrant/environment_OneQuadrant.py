@@ -78,9 +78,12 @@ class OneQuadrant:
 '''
 env = OneQuadrant()
 print(env.action_space)
-state = env.reset()
-print(state)
+size = env.observation_space.shape[0]
+print(size)
 action_close = 1
+in_shape = (size,)
+print(in_shape)
+
 while not env.episode_ended:
     state, reward, done, _ = env.step(action_close)
     print(state, reward, done)
