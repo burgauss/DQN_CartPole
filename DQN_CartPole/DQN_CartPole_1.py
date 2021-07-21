@@ -153,7 +153,7 @@ class DQNAgent:
 
 if __name__ == "__main__":
     agent = DQNAgent()
-    #agent.run()
-    agent.test()
+    agent.run()
+    #agent.test()
     #print(agent.env._max_episode_steps)
     
