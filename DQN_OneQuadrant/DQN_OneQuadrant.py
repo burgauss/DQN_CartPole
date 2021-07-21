@@ -112,11 +112,11 @@ class DQNAgent:
         # for speedup, this could be done on the tensor level
         # but easier to understand using a loop
         for i in range(self.batch_size):
-            state.append = minibatch[i][0]
+            state.append(minibatch[i][0])
             #state[i] = minibatch[i][0]
             action.append(minibatch[i][1])
             reward.append(minibatch[i][2])
-            next_state.append = minibatch[i][3]
+            next_state.append(minibatch[i][3])
             #next_state[i] = minibatch[i][3]
             done.append(minibatch[i][4])
 
@@ -152,7 +152,6 @@ class DQNAgent:
             done = False
             i = 0 #represent the steps
             while not done:
-                self.env.render()
                 action = self.act(state)
                 next_state, reward, done, _ = self.env.step(action)
                 #next_state = np.reshape(next_state, [1, self.state_size])
