@@ -1,6 +1,6 @@
 import math
 import numpy as np
-
+import random
 
 class OneQuadrant:
     def __init__(self):
@@ -79,10 +79,8 @@ class OneQuadrant:
 env = OneQuadrant()
 print(env.action_space)
 state = env.reset()
-print(env.observation_space.shape[0])
-
-'''
+print(state)
+action_close = 1
 while not env.episode_ended:
     state, reward, done, _ = env.step(action_close)
     print(state, reward, done)
-'''

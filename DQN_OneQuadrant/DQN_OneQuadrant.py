@@ -1,4 +1,4 @@
-from DQN_OneQuadrant.environment_OneQuadrant import OneQuadrant
+#from DQN_OneQuadrant.environment_OneQuadrant import OneQuadrant
 import os
 os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 import random
@@ -9,7 +9,7 @@ from keras.models import Model, load_model
 from keras.layers import Input, Dense
 from keras.optimizers import Adam, RMSprop
 
-import environment_OneQuadrant
+from environment_OneQuadrant import OneQuadrant
 
 
 def OurModel(input_shape, action_space):
@@ -29,16 +29,49 @@ def OurModel(input_shape, action_space):
     X = Dense(action_space, activation=None, kernel_initializer='he_uniform')(X)
 
     model = Model(inputs = X_input, outputs = X, name='CartPole_DQN_model')
-    model.compile(loss="mean_squared_error", optimizer=RMSprop(lr=0.00025, rho=0.95, epsilon=0.01), metrics=["accuracy"])
+    model.compile(loss="mean_squared_error", optimizer=RMSprop(learning_rate=0.00025, rho=0.95, epsilon=0.01), metrics=["accuracy"])
     model.summary()
     return model
 
 class DQNAgent:
+    """
+    Description:
+        The following environment represents a LR circuit with 
+        a control switch.
+        The system always starts with the Inductor Not charge
+        The goal is to keep the charge at the output in a specific
+        value, by open or closing the switch, i.e., by controlling
+        the charge in the inductor
+
+    Observation:
+        Type: float32
+        Num   Observation             Min   Max
+        0     Voltage at the output   0     10
+
+    Actions:
+        Type: Discrete (2)
+        Num     Action
+        0       Open the Switch
+        1       Close the Switch
+
+    Reward:
+        The reward will be calculated according the difference 
+        between the reference value and the actual observation
+        Maximun reward available is 1, worst reward availables are 0.5
+        reward = 1 - abs(self.referenceVal - self.voltageOut)/self.voltageIn
+
+    Starting State:
+        Always start with Voltage 0
+
+    Episode Termination:
+        Episode Length is greater than 100
+
+    """
     def __init__(self):
         self.env = OneQuadrant()
         # One Quadrant has a maximun steps of 100
         self.state_size = self.env.observation_space.shape[0]
-        self.action_size = self.env.action_space.n
+        self.action_size = self.env.action_space.shape[0]
         self.EPISODES = 1000
         self.memory = deque(maxlen=2000)
         
@@ -69,18 +102,22 @@ class DQNAgent:
             return
         # Randomly sample minibatch from the memory
         minibatch = random.sample(self.memory, min(len(self.memory), self.batch_size))
-        state = np.zeros((self.batch_size, self.state_size))
-        next_state = np.zeros((self.batch_size, self.state_size))
+        state = []
+        next_state = []
+        #state = np.zeros((self.batch_size, self.state_size))
+        #next_state = np.zeros((self.batch_size, self.state_size))
         action, reward, done = [], [], []
 
         # do this before prediction
         # for speedup, this could be done on the tensor level
         # but easier to understand using a loop
         for i in range(self.batch_size):
-            state[i] = minibatch[i][0]
+            state.append = minibatch[i][0]
+            #state[i] = minibatch[i][0]
             action.append(minibatch[i][1])
             reward.append(minibatch[i][2])
-            next_state[i] = minibatch[i][3]
+            next_state.append = minibatch[i][3]
+            #next_state[i] = minibatch[i][3]
             done.append(minibatch[i][4])
 
         # do batch prediction to save speed
@@ -111,25 +148,24 @@ class DQNAgent:
     def run(self):
         for e in range(self.EPISODES):
             state = self.env.reset()
-            state = np.reshape(state, [1, self.state_size])
+            #state = np.reshape(state, [1, self.state_size])
             done = False
-            i = 0
+            i = 0 #represent the steps
             while not done:
                 self.env.render()
                 action = self.act(state)
                 next_state, reward, done, _ = self.env.step(action)
-                #print(done)
-                next_state = np.reshape(next_state, [1, self.state_size])
-                if not done or i == self.env._max_episode_steps-1:
-                    reward = reward
-                else:
-                    reward = -100
+                #next_state = np.reshape(next_state, [1, self.state_size])
+                #if not done or i == self.env._max_episode_steps-1:
+                #    reward = reward
+                #else:
+                #    reward = -100
                 self.remember(state, action, reward, next_state, done)
                 state = next_state
                 i += 1
                 if done:                   
                     print("episode: {}/{}, score: {}, e: {:.2}".format(e, self.EPISODES, i, self.epsilon))
-                    if i == self.env._max_episode_steps:
+                    if i == 100:
                         print("Saving trained model as cartpole-dqn.h5")
                         self.save("cartpole-dqn.h5")
                         return
@@ -156,6 +192,4 @@ if __name__ == "__main__":
     agent = DQNAgent()
     #agent.run()
     #agent.test()
-    saludo = gretting()
-    saludo.greet()
     
