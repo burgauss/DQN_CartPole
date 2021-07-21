@@ -20,7 +20,7 @@ def OurModel(input_shape, action_space):
     X = Dense(512, input_shape=input_shape, activation="relu", kernel_initializer='he_uniform')(X_input)
 
     # Hidden layer with 256 nodes
-    X = Dense(256, activation="relu", kernel_initializer='he_uniform')(X)
+    #X = Dense(256, activation="relu", kernel_initializer='he_uniform')(X)
     
     # Hidden layer with 64 nodes
     X = Dense(64, activation="relu", kernel_initializer='he_uniform')(X)
@@ -80,7 +80,7 @@ class DQNAgent:
         self.epsilon_min = 0.001
         self.epsilon_decay = 0.999
         self.batch_size = 64
-        self.train_start = 1000
+        self.train_start = 400
 
         # create main model
         self.model = OurModel(input_shape=(self.state_size,), action_space = self.action_size)
@@ -169,7 +169,7 @@ class DQNAgent:
                 i += 1
                 if done:                   
                     print("episode: {}/{}, step: {}, e: {:.2}, ep_reward: {}".format(e, self.EPISODES, i, self.epsilon, episode_reward))
-                    if episode_reward > 95:
+                    if e > 25:
                         print("Saving trained model as cartpole-dqn.h5")
                         self.save("cartpole-dqn.h5")
                         return
@@ -190,12 +190,13 @@ class DQNAgent:
                 episode_reward += reward
                 #state = np.reshape(next_state, [1, self.state_size])
                 i += 1
+                print("observation: {}, action_taked: {}".format(next_state, action))
                 if done:
                     print("episode: {}/{}, avg_reward: {}".format(e, self.EPISODES, episode_reward))
                     break
 
 if __name__ == "__main__":
     agent = DQNAgent()
-    #agent.run()
-    agent.test()
+    agent.run()
+    #agent.test()
     
