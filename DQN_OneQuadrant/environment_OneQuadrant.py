@@ -36,7 +36,7 @@ class OneQuadrant:
         self.i_dot = 0.0
         self.steps_episode = 0
 
-        return self.state
+        return round(self.state, 2)
 
     def step(self, action):
         # Verifying that the action is valid
@@ -71,7 +71,7 @@ class OneQuadrant:
             self.episode_ended = True
         
         #Return the trajectory
-        return self.state, reward, self.episode_ended, {}
+        return round(self.state,2), reward, self.episode_ended, {}
 
 
 #Example of initialization
