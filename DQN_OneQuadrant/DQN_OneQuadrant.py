@@ -8,6 +8,9 @@ from keras.models import Model, load_model
 from keras.layers import Input, Dense
 from keras.optimizers import Adam, RMSprop
 
+import environment_OneQuadrant
+from environment_OneQuadrant import gretting
+
 #from tf_agents.environments import py_environment
 #from tf_agents.environments import tf_environment
 
@@ -154,6 +157,7 @@ class DQNAgent:
 if __name__ == "__main__":
     agent = DQNAgent()
     #agent.run()
-    agent.test()
-    #print(agent.env._max_episode_steps)
+    #agent.test()
+    saludo = gretting()
+    saludo.greet()
     
