@@ -168,7 +168,7 @@ class DQNAgent:
                 state = next_state
                 i += 1
                 if done:                   
-                    print("episode: {}/{}, score: {}, e: {:.2}, ep_reward: {}".format(e, self.EPISODES, i, self.epsilon, episode_reward))
+                    print("episode: {}/{}, step: {}, e: {:.2}, ep_reward: {}".format(e, self.EPISODES, i, self.epsilon, episode_reward))
                     if episode_reward > 95:
                         print("Saving trained model as cartpole-dqn.h5")
                         self.save("cartpole-dqn.h5")
@@ -179,21 +179,23 @@ class DQNAgent:
         self.load("cartpole-dqn.h5")
         for e in range(self.EPISODES):
             state = self.env.reset()
-            state = np.reshape(state, [1, self.state_size])
+            #state = np.reshape(state, [1, self.state_size])
             done = False
             i = 0
+            episode_reward = 0
             while not done:
-                self.env.render()
-                action = np.argmax(self.model.predict(state))
+                action = np.argmax(self.model.predict(x=(state,)))
                 next_state, reward, done, _ = self.env.step(action)
-                state = np.reshape(next_state, [1, self.state_size])
+                state = next_state
+                episode_reward += reward
+                #state = np.reshape(next_state, [1, self.state_size])
                 i += 1
                 if done:
-                    print("episode: {}/{}, score: {}".format(e, self.EPISODES, i))
+                    print("episode: {}/{}, avg_reward: {}".format(e, self.EPISODES, episode_reward))
                     break
 
 if __name__ == "__main__":
     agent = DQNAgent()
-    agent.run()
-    #agent.test()
+    #agent.run()
+    agent.test()
     
