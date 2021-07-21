@@ -1,3 +1,4 @@
+from DQN_OneQuadrant.environment_OneQuadrant import OneQuadrant
 import os
 os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 import random
@@ -9,10 +10,7 @@ from keras.layers import Input, Dense
 from keras.optimizers import Adam, RMSprop
 
 import environment_OneQuadrant
-from environment_OneQuadrant import gretting
 
-#from tf_agents.environments import py_environment
-#from tf_agents.environments import tf_environment
 
 def OurModel(input_shape, action_space):
     X_input = Input(input_shape)
@@ -37,8 +35,8 @@ def OurModel(input_shape, action_space):
 
 class DQNAgent:
     def __init__(self):
-        self.env = gym.make('CartPole-v0')
-        # by default, CartPole-v1 has max episode steps = 500
+        self.env = OneQuadrant()
+        # One Quadrant has a maximun steps of 100
         self.state_size = self.env.observation_space.shape[0]
         self.action_size = self.env.action_space.n
         self.EPISODES = 1000

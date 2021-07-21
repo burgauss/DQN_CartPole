@@ -17,7 +17,7 @@ class OneQuadrant:
         self.action_space = np.array([0,1])
 
         #Observation Space
-        self.observation_space = np.array([0, self.voltageIn])
+        self.observation_space = np.array([0])
 
         self.state = 0.0
         self.episode_ended = False
@@ -75,13 +75,13 @@ class OneQuadrant:
 
 
 #Example of initialization
-'''
+
 env = OneQuadrant()
 print(env.action_space)
 state = env.reset()
-print(state)
-action_close = 1
+print(env.observation_space.shape[0])
 
+'''
 while not env.episode_ended:
     state, reward, done, _ = env.step(action_close)
     print(state, reward, done)
