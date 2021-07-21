@@ -34,7 +34,7 @@ def OurModel(input_shape, action_space):
 
 class DQNAgent:
     def __init__(self):
-        self.env = gym.make('CartPole-v1')
+        self.env = gym.make('CartPole-v0')
         # by default, CartPole-v1 has max episode steps = 500
         self.state_size = self.env.observation_space.shape[0]
         self.action_size = self.env.action_space.n
@@ -117,6 +117,7 @@ class DQNAgent:
                 self.env.render()
                 action = self.act(state)
                 next_state, reward, done, _ = self.env.step(action)
+                #print(done)
                 next_state = np.reshape(next_state, [1, self.state_size])
                 if not done or i == self.env._max_episode_steps-1:
                     reward = reward
@@ -127,7 +128,7 @@ class DQNAgent:
                 i += 1
                 if done:                   
                     print("episode: {}/{}, score: {}, e: {:.2}".format(e, self.EPISODES, i, self.epsilon))
-                    if i == 500:
+                    if i == self.env._max_episode_steps:
                         print("Saving trained model as cartpole-dqn.h5")
                         self.save("cartpole-dqn.h5")
                         return
@@ -152,5 +153,7 @@ class DQNAgent:
 
 if __name__ == "__main__":
     agent = DQNAgent()
-    agent.run()
-    #agent.test()
+    #agent.run()
+    agent.test()
+    #print(agent.env._max_episode_steps)
+    
