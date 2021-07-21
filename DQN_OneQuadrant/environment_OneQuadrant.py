@@ -75,7 +75,7 @@ class OneQuadrant:
 
 
 #Example of initialization
-
+'''
 env = OneQuadrant()
 print(env.action_space)
 state = env.reset()
@@ -84,3 +84,4 @@ action_close = 1
 while not env.episode_ended:
     state, reward, done, _ = env.step(action_close)
     print(state, reward, done)
+'''
