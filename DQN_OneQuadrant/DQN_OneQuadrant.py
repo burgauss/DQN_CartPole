@@ -28,7 +28,7 @@ def OurModel(input_shape, action_space):
     # Output Layer with # of actions: 2 nodes (left, right)
     X = Dense(action_space, activation=None, kernel_initializer='he_uniform')(X)
 
-    model = Model(inputs = X_input, outputs = X, name='CartPole_DQN_model')
+    model = Model(inputs = X_input, outputs = X, name='OneQuadrant_DQN_model')
     model.compile(loss="mean_squared_error", optimizer=RMSprop(learning_rate=0.00025, rho=0.95, epsilon=0.01), metrics=["accuracy"])
     model.summary()
     return model
@@ -95,7 +95,7 @@ class DQNAgent:
         if np.random.random() <= self.epsilon:
             return random.randrange(self.action_size)
         else:
-            return np.argmax(self.model.predict(state))
+            return np.argmax(self.model.predict(x=(state,)))
 
     def replay(self):
         if len(self.memory) < self.train_start:
@@ -136,7 +136,7 @@ class DQNAgent:
                 target[i][action[i]] = reward[i] + self.gamma * (np.amax(target_next[i]))
 
         # Train the Neural Network with batches
-        self.model.fit(state, target, batch_size=self.batch_size, verbose=0)
+        self.model.fit(np.array(state), target, batch_size=self.batch_size, verbose=0)
 
 
     def load(self, name):
@@ -150,9 +150,9 @@ class DQNAgent:
             state = self.env.reset()
             #state = np.reshape(state, [1, self.state_size])
             done = False
-            i = 0 #represent the steps
+            i = 0       #represent the steps
+            episode_reward = 0
             while not done:
-                episode_reward = 0
                 action = self.act(state)
                 next_state, reward, done, _ = self.env.step(action)
                 #next_state = np.reshape(next_state, [1, self.state_size])
