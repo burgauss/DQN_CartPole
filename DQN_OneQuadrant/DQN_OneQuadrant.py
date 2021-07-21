@@ -29,7 +29,7 @@ def OurModel(input_shape, action_space):
     X = Dense(action_space, activation=None, kernel_initializer='he_uniform')(X)
 
     model = Model(inputs = X_input, outputs = X, name='OneQuadrant_DQN_model')
-    model.compile(loss="mean_squared_error", optimizer=RMSprop(learning_rate=0.00025, rho=0.95, epsilon=0.01), metrics=["accuracy"])
+    model.compile(loss="mean_squared_error", optimizer=RMSprop(learning_rate=0.025, rho=0.95, epsilon=0.01), metrics=["accuracy"])
     model.summary()
     return model
 
@@ -169,7 +169,7 @@ class DQNAgent:
                 i += 1
                 if done:                   
                     print("episode: {}/{}, score: {}, e: {:.2}, ep_reward: {}".format(e, self.EPISODES, i, self.epsilon, episode_reward))
-                    if i == 100:
+                    if episode_reward > 95:
                         print("Saving trained model as cartpole-dqn.h5")
                         self.save("cartpole-dqn.h5")
                         return
