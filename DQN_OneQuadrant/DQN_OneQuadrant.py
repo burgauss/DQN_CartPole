@@ -8,7 +8,7 @@ from collections import deque
 from keras.models import Model, load_model
 from keras.layers import Input, Dense
 from keras.optimizers import Adam, RMSprop
-
+import tensorflow as tf
 from environment_OneQuadrant import OneQuadrant
 
 
@@ -17,10 +17,11 @@ def OurModel(input_shape, action_space):
 
     # 'Dense' is the basic form of a neural network layer
     # Input Layer of state size(4) and Hidden Layer with 512 nodes
-    X = Dense(512, input_shape=input_shape, activation="relu", kernel_initializer='he_uniform')(X_input)
+    X = Dense(512, input_shape=input_shape, activation="relu", kernel_initializer=tf.keras.initializers.RandomUniform(
+        minval = -0.03, maxval = 0.03))(X_input)
 
     # Hidden layer with 256 nodes
-    #X = Dense(256, activation="relu", kernel_initializer='he_uniform')(X)
+    X = Dense(256, activation="relu", kernel_initializer='he_uniform')(X)
     
     # Hidden layer with 64 nodes
     X = Dense(64, activation="relu", kernel_initializer='he_uniform')(X)
@@ -29,7 +30,7 @@ def OurModel(input_shape, action_space):
     X = Dense(action_space, activation=None, kernel_initializer='he_uniform')(X)
 
     model = Model(inputs = X_input, outputs = X, name='OneQuadrant_DQN_model')
-    model.compile(loss="mean_squared_error", optimizer=RMSprop(learning_rate=0.01, rho=0.90, epsilon=0.01), metrics=["accuracy"])
+    model.compile(loss="mean_squared_error", optimizer=RMSprop(learning_rate=0.005, rho=1, epsilon=0.01), metrics=["accuracy"])
     model.summary()
     return model
 
@@ -80,7 +81,7 @@ class DQNAgent:
         self.epsilon_min = 0.001
         self.epsilon_decay = 0.999
         self.batch_size = 64
-        self.train_start = 400
+        self.train_start = 800
 
         # create main model
         self.model = OurModel(input_shape=(self.state_size,), action_space = self.action_size)
@@ -197,6 +198,6 @@ class DQNAgent:
 
 if __name__ == "__main__":
     agent = DQNAgent()
-    agent.run()
-    #agent.test()
+    #agent.run()
+    agent.test()
     
