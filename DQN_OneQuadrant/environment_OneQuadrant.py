@@ -61,8 +61,9 @@ class OneQuadrant:
             raise ValueError('action should be 0 or 1')
 
         # Reward definition
-        # R = 1 - abs(w - y)/maxVal
-        reward = 1 - abs(self.referenceVal - self.voltageOut)/self.voltageIn
+        ### R = 1 - abs(w - y)/maxVal
+        # reward = 1 - abs(self.referenceVal - self.voltageOut)/self.voltageIn
+        reward = (self.voltageOut - self.referenceVal) * (self.voltageOut - self.referenceVal)
         # count steps in the episode
         self.steps_episode += 1
 
