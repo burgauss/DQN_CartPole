@@ -1,6 +1,6 @@
 import math
 import numpy as np
-
+import random
 
 class OneQuadrant:
     def __init__(self):
@@ -36,7 +36,7 @@ class OneQuadrant:
         self.i_dot = 0.0
         self.steps_episode = 0
 
-        return self.state
+        return round(self.state, 2)
 
     def step(self, action):
         # Verifying that the action is valid
@@ -71,17 +71,19 @@ class OneQuadrant:
             self.episode_ended = True
         
         #Return the trajectory
-        return self.state, reward, self.episode_ended, {}
+        return round(self.state,2), reward, self.episode_ended, {}
 
 
 #Example of initialization
-
+'''
 env = OneQuadrant()
 print(env.action_space)
-state = env.reset()
-print(env.observation_space.shape[0])
+size = env.observation_space.shape[0]
+print(size)
+action_close = 1
+in_shape = (size,)
+print(in_shape)
 
-'''
 while not env.episode_ended:
     state, reward, done, _ = env.step(action_close)
     print(state, reward, done)
