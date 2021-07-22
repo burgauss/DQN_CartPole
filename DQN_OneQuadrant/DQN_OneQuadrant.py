@@ -30,7 +30,7 @@ def OurModel(input_shape, action_space):
     X = Dense(action_space, activation=None, kernel_initializer='he_uniform')(X)
 
     model = Model(inputs = X_input, outputs = X, name='OneQuadrant_DQN_model')
-    model.compile(loss="mean_squared_error", optimizer=RMSprop(learning_rate=0.005, rho=1, epsilon=0.01), metrics=["accuracy"])
+    model.compile(loss="mean_squared_error", optimizer=RMSprop(learning_rate=0.1, rho=1, epsilon=0.01), metrics=["accuracy"])
     model.summary()
     return model
 
@@ -198,6 +198,6 @@ class DQNAgent:
 
 if __name__ == "__main__":
     agent = DQNAgent()
-    #agent.run()
-    agent.test()
+    agent.run()
+    #agent.test()
     

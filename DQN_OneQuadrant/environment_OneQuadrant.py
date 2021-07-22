@@ -67,7 +67,7 @@ class OneQuadrant:
         self.steps_episode += 1
 
         #Evaluation for episode ending
-        if self.steps_episode > 100:
+        if self.steps_episode > 99:
             self.episode_ended = True
         
         #Return the trajectory
