@@ -62,8 +62,8 @@ class OneQuadrant:
 
         # Reward definition
         ### R = 1 - abs(w - y)/maxVal
-        reward = 1 - abs(self.referenceVal - self.voltageOut)/self.voltageIn
-        #reward = -(self.voltageOut - self.referenceVal) * (self.voltageOut - self.referenceVal)
+        #reward = 1 - abs(self.referenceVal - self.voltageOut)/self.voltageIn
+        reward = -(self.voltageOut - self.referenceVal) * (self.voltageOut - self.referenceVal)
         # count steps in the episode
         self.steps_episode += 1
 
@@ -79,7 +79,11 @@ class OneQuadrant:
 '''
 env = OneQuadrant()
 action_close = 1
+episode_reward = 0
 while not env.episode_ended:
     state, reward, done, _ = env.step(action_close)
+    episode_reward = reward
     print(state, reward, done)
+
+print("final reward: ", episode_reward)
 '''
