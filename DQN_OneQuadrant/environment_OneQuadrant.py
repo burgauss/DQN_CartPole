@@ -61,8 +61,9 @@ class OneQuadrant:
             raise ValueError('action should be 0 or 1')
 
         # Reward definition
-        # R = 1 - abs(w - y)/maxVal
-        reward = 1 - abs(self.referenceVal - self.voltageOut)/self.voltageIn
+        ### R = 1 - abs(w - y)/maxVal
+        #reward = 1 - abs(self.referenceVal - self.voltageOut)/self.voltageIn
+        reward = -(self.voltageOut - self.referenceVal) * (self.voltageOut - self.referenceVal)
         # count steps in the episode
         self.steps_episode += 1
 
@@ -77,14 +78,12 @@ class OneQuadrant:
 #Example of initialization
 '''
 env = OneQuadrant()
-print(env.action_space)
-size = env.observation_space.shape[0]
-print(size)
 action_close = 1
-in_shape = (size,)
-print(in_shape)
-
+episode_reward = 0
 while not env.episode_ended:
     state, reward, done, _ = env.step(action_close)
+    episode_reward = reward
     print(state, reward, done)
+
+print("final reward: ", episode_reward)
 '''
